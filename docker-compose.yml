@@ -1,0 +1,26 @@
+version: "3.6"
+services:
+  app:
+    container_name: app
+    restart: always
+    build: .
+    ports:
+      - "5000:3000"
+    links:
+      - mongo
+    environment:
+      - URL_MONGO=mongodb://xelaktic:passer2021@mongo:27017
+      - DATABASE_PASS=passer2021
+      - DATABASE_NAME=xelakticDB
+    depends_on:
+      - mongo
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    env_file:
+      - .env
+    ports:
+      - 27017:27017
+    volumes:
+      - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
+      - ./data/db:/data/db
